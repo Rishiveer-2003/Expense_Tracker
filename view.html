@@ -1,0 +1,144 @@
+<%@page import="com.conn.DbConnect"%>
+<%@page import="java.sql.*"%>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="component/style.css">
+
+<style type="text/css">
+.list-group-item {
+	padding: 8px !important;
+}
+</style>
+
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<div class="col-sm-2 p-1">
+				<center>
+					<img src="images/usericon.jpg" width=100; height=100;
+						class="img-thumbnail rounded-circle my-3">
+				</center>
+
+				<div class="list-group">
+					<a href="dashboard.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Dashboard</a>
+					<a href="addExpense.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Add
+						Expense</a> <a href="manageExpense.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Manage
+						Expense</a> <a href="#"
+						class="list-group-item list-group-item-warning list-group-item-action active">Expenses
+						Report</a> <a href="userprofile.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Profile</a>
+					<a href="changePassword.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Change
+						Password</a> <a href="logout.jsp"
+						class="list-group-item list-group-item-warning list-group-item-action">Logout</a>
+				</div>
+			</div>
+   
+			<div class="col-sm-10">
+				<div class="container-fluid p-2">
+					<h3 class="text-center p-3 font-weight-bold"
+						style="border-bottom: 2px solid green; border-top: 2px solid green">DAILY
+						EXPENSE TRACKER</h3>
+
+					<div class="card shadow" style="min-height: 89vh">
+						<div class="card-body">
+							<h5 class="text-danger p-2"
+								style="border-bottom: 2px solid orange">Datewise Expense
+								Report</h5>
+							<br>
+
+							<div class="container mt-5">
+								<h1 class="text-success text-center"></h1>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>S.No</th>
+											<th>Date</th>
+											<th>Expense Amount</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+										double grandtotal = 0.0;
+											try {
+												String email = session.getAttribute("email").toString();
+												String startdt = request.getParameter("startdt").toString();
+												String todate = request.getParameter("todate").toString();
+
+												Connection con = DbConnect.getConn();
+												Statement st = con.createStatement();
+												
+												ResultSet rs = st.executeQuery(
+														"SELECT expensedate,SUM(expensecost) as totaldaily FROM expense  where (expensedate BETWEEN '" + startdt + "' and '" + todate + "') && (email='"+email+"') group by expensedate");
+												int i = 0;
+
+												while (rs.next()) {
+													i++;
+										%>
+										<td><%=i%></td>
+										<td><%=rs.getString("expensedate")%></td>
+										<%
+										grandtotal = grandtotal + Double.parseDouble(rs.getString("totaldaily"));
+												%>
+										<td><%=rs.getString("totaldaily")%></td>
+										</tr>
+
+
+										<%
+											}
+										%>
+										<h5 align="center" style="color: blue">
+											Datewise Expense Report from
+											<%
+											out.println(startdt);
+										%>
+											to
+											<%
+											out.println(todate);
+										%>
+										</h5>
+										<br>
+										<br>
+
+										<%
+											} catch (Exception e) {
+												System.out.println(e);
+											}
+										%>
+
+									</tbody>
+									<tr>
+						        <th style="text-align: center; font-size: 20px"
+							         colspan="2">Grand Total</th>
+						            <td><%out.print(grandtotal); %></td>
+					           </tr>
+								</table>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

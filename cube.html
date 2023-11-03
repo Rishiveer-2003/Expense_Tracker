@@ -1,0 +1,85 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Form</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <%
+		String validMsg = (String) session.getAttribute("validMsg");
+		String invalidMsg = (String) session.getAttribute("invalidMsg");
+		String succMsg = (String) session.getAttribute("succMsg");
+		if (validMsg != null) {
+	%>
+	<script>
+		alert("Logged in Successfully");
+		window.location.assign("dashboard.jsp");
+	</script>
+	<%
+		session.removeAttribute("validMsg");
+		}
+	%>
+	<%
+		if (invalidMsg != null) {
+	%>
+	<script>
+		alert("Invalid Email & Password");
+	</script>
+	<%
+		session.removeAttribute("invalidMsg");
+		}
+	%>
+	
+	<%
+		if (succMsg != null) {
+	%>
+	<script>
+		alert("Logout Successfully...");
+		window.location.assign("index.jsp");
+	</script>
+	<%
+		session.removeAttribute("succMsg");
+		}
+	%>
+
+	<img class="wave" src="images/wave.png">
+	<div class="container">
+		<div class="img">
+			<img src="images/bg.svg">
+		</div>
+		<div class="login-content">
+			<form action="login" method="post">
+			
+				<img src="images/avatar.svg">
+				<h2 class="title">Welcome</h2>
+           		<div class="input-div one">
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   </div>
+           		   <div class="div">
+           		   		<h5>Email Id</h5>
+           		   		<input type="text" name="email" class="input">
+           		   </div>
+           		</div>
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<h5>Password</h5>
+           		    	<input type="password" name="password" class="input">
+            	   </div>
+            	</div>
+            	<a href="register.jsp">Create An Account</a>
+            	<input type="submit" class="btn" value="Login">
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
